@@ -106,8 +106,11 @@ class BaseCAM:
 
         if self.uses_gradients:
             self.model.zero_grad()
-            loss = torch.sum(
-                torch.vstack([target(self.outputs[self.target_key]) for target in targets])
+            loss = sum(
+                [
+                    target(output)
+                    for target, output in zip(targets, self.outputs[self.target_key])
+                ]
             )
             loss.backward(retain_graph=True)
 
